@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   metodos-numericos:
     image: ghcr.io/leonardo-m-martins/metodos-numericos-implementacao-em-python:latest
@@ -11,3 +9,10 @@ services:
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:
       - "8000:8000"
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true
+    name: ${NETWORK_NAME}
