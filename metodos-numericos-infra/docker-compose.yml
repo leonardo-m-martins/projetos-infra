@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  metodos-numericos:
+    image: ghcr.io/leonardo-m-martins/metodos-numericos-implementacao-em-python:latest
+    container_name: metodos-numericos
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
