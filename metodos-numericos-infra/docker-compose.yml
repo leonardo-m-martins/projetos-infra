@@ -5,5 +5,9 @@ services:
     image: ghcr.io/leonardo-m-martins/metodos-numericos-implementacao-em-python:latest
     container_name: metodos-numericos
     restart: unless-stopped
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:
       - "8000:8000"
