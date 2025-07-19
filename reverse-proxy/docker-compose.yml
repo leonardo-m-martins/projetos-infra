@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -8,6 +6,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      - TRUST_DOWNSTREAM_PROXY=false
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./certs:/etc/nginx/certs:ro
@@ -31,6 +31,7 @@ services:
       - ./certs:/etc/nginx/certs
       - ./vhost.d:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
+      - ./acme:/etc/acme.sh      # <-- ADICIONADO para persistência dos certificados
     networks:
       - proxy-tier
     dns:
