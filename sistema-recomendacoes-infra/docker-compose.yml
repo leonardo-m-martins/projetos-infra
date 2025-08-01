@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   mysql:
-    image: mysql-sistema-recomendacoes:latest
+    image: ghcr.io/leonardo-m-martins/reclivros-mysql:latest
     container_name: mysql-sistema
     ports:
       - "3306:3306"
@@ -13,9 +11,13 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - reverse-proxy
 
   backend:
-    image: sistema-recomendacoes-backend:latest
+    image: ghcr.io/leonardo-m-martins/reclivros-backend:latest
     container_name: backend-sistema
     ports:
       - "8080:8080"
@@ -25,15 +27,31 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sistema_recomendacoes
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      VIRTUAL_HOST: ${VIRTUAL_HOST_BACKEND}
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST_BACKEND}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL_BACKEND}
+    networks:
+      - reverse-proxy
 
   frontend:
-    image: sistema-recomendacoes-frontend:latest
+    image: ghcr.io/leonardo-m-martins/reclivros-frontend:latest
     container_name: frontend-sistema
     ports:
-      - "3000:80"
+      - "8001:80"
     depends_on:
       - backend
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST_FRONTEND}
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST_FRONTEND}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL_FRONTEND}
+    networks:
+      - reverse-proxy
 
 volumes:
   mysql_data:
+
+networks:
+  reverse-proxy:
+    external: true
+    name: ${NETWORK_NAME}
