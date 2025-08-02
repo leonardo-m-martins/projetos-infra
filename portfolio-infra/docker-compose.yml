@@ -1,0 +1,18 @@
+services:
+  metodos-numericos:
+    image: ghcr.io/leonardo-m-martins/portfolio:latest
+    container_name: portfolio-container
+    restart: unless-stopped
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    ports:
+      - "8002:80"
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true
+    name: ${NETWORK_NAME}
