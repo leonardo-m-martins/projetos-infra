@@ -25,12 +25,14 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sistema_recomendacoes
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      VIRTUAL_HOST: ${VIRTUAL_HOST_BACKEND}
-      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST_BACKEND}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL_BACKEND}
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/sistema_recomendacoes
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - app.config.allowed-origin=${APP_CONFIG_ALLOWED_ORIGIN}
+      - auth.permanent-token=${AUTH_PERMANENT_TOKEN}
+      - VIRTUAL_HOST=${VIRTUAL_HOST_BACKEND}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST_BACKEND}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL_BACKEND}
     networks:
       - reverse-proxy
 
